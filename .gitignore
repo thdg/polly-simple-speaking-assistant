@@ -1,0 +1,6 @@
+secrets.py
+*.wav
+env/
+env2/
+venv/
+venv2/
