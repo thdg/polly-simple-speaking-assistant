@@ -3,8 +3,11 @@ import boto3
 import simpleaudio as sa
 import wave
 
-access_key_id = "placeholder"
-secret_access_key = "placeholder"
+try:
+    from secrets import access_key_id, secret_access_key
+except importError:
+    print("Please make sure you create a secret file with aws keys")
+    exit()
 
 POLLY = boto3.Session(
     aws_access_key_id=access_key_id,
@@ -28,10 +31,14 @@ def save_file(response):
 def play(fname):
     wave_obj = sa.WaveObject.from_wave_file(fname)
     play_obj = wave_obj.play()
-    play_obj.wait_done()
+    return play_obj
 
+print("Hvað liggur þér á hjarta?")
+po = None
 while True:
     text = input(u"")
     r = get_audio(text)
     f = save_file(r)
-    play(f)
+    if po:
+        po.wait_done()
+    po = play(f)
